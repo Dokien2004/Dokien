@@ -1,0 +1,113 @@
+/* Tailwind Config */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .font-playfair { @apply font-serif; } /* Sử dụng Playfair Display */
+}
+
+/* Animations tùy chỉnh */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.animate-gradient-shift {
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+@keyframes bloom {
+  0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+}
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Animation mới: Trái tim rơi xuống ngẫu nhiên (với prefix cho Chrome/Safari) */
+@keyframes falling {
+  0% {
+    transform: translateY(-100%) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120vh) translateX(var(--sway-end)) rotate(360deg);
+    opacity: 0;
+  }
+}
+@keyframes sway { /* Sway nhẹ trong quá trình rơi */
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(var(--sway-amplitude)); }
+}
+
+/* Prefix cho webkit (Chrome/Safari) */
+@-webkit-keyframes falling {
+  0% {
+    -webkit-transform: translateY(-100%) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(120vh) translateX(var(--sway-end)) rotate(360deg);
+    opacity: 0;
+  }
+}
+@-webkit-keyframes sway {
+  0%, 100% { -webkit-transform: translateX(0); }
+  50% { -webkit-transform: translateX(var(--sway-amplitude)); }
+}
+
+/* Classes tùy chỉnh */
+.envelope-flap {
+  clip-path: polygon(0 0, 50% 60%, 100% 0);
+}
+.touch-manipulation {
+  touch-action: manipulation;
+}
+.typewriter {
+  overflow: hidden;
+  border-right: .15em solid #red-500;
+  white-space: nowrap;
+  margin: 0 auto;
+  animation: typewriter 2s steps(40, end), blink-caret .75s step-end infinite;
+}
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #red-500; }
+}
+
+/* Class cho trái tim rơi (thêm fill-mode để giữ state, will-change cho perf) */
+.heart-falling {
+  animation: falling var(--duration) linear infinite, sway var(--duration) ease-in-out infinite;
+  animation-fill-mode: forwards; /* Giữ animation sau khi end */
+  will-change: transform, opacity; /* Tối ưu perf cho animation */
+  -webkit-animation: falling var(--duration) linear infinite, sway var(--duration) ease-in-out infinite;
+  -webkit-animation-fill-mode: forwards;
+}
+
+/* Confetti styles (JS sẽ handle) */
+#confetti {
+  background: transparent;
+}// Khởi tạo Lucide icons
+lucide.createIcons();
