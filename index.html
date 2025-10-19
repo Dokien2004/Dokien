@@ -1,315 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main.css">
-    <link rel="icon" href="img/flowers.png" type="image/x-icon">
-    <title>flowers</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thiệp Chúc Mừng 20/10 - Trái Tim Rơi</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+   <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Định nghĩa animations tùy chỉnh cho Tailwind -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'bloom': 'bloom 2s ease-in-out infinite',
+            'fade-in': 'fadeIn 0.5s ease-out',
+            'scale-in': 'scaleIn 0.3s ease-out',
+          },
+          keyframes: {
+            bloom: {
+              '0%, 100%': { transform: 'scale(0) rotate(0deg)', opacity: 0 },
+              '50%': { transform: 'scale(1.1) rotate(5deg)', opacity: 1 },
+            },
+            fadeIn: {
+              '0%': { opacity: 0, transform: 'translateY(20px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            scaleIn: {
+              '0%': { transform: 'scale(0.9)' },
+              '100%': { transform: 'scale(1)' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    /* CSS bổ sung cho envelope flap và touch-action */
+    .envelope-flap {
+      clip-path: polygon(0 0, 50% 60%, 100% 0);
+    }
+    .touch-manipulation {
+      touch-action: manipulation;
+    }
+    /* Font-serif cho letter (Tailwind có sẵn, nhưng đảm bảo) */
+    .font-serif { font-family: serif; }
+  </style>
 </head>
-<audio id="myAudio" autoplay="autoplay">
-    <source src="music_final.MP3" type="audio/mp3" />
-</audio>
-<body class="container">
-    <div class="night"></div>
-    <div class="flowers">
-      <div class="flower flower--1">
-        <div class="flower__leafs flower__leafs--1">
-          <div class="flower__leaf flower__leaf--1"></div>
-          <div class="flower__leaf flower__leaf--2"></div>
-          <div class="flower__leaf flower__leaf--3"></div>
-          <div class="flower__leaf flower__leaf--4"></div>
-          <div class="flower__white-circle"></div>
-  
-          <div class="flower__light flower__light--1"></div>
-          <div class="flower__light flower__light--2"></div>
-          <div class="flower__light flower__light--3"></div>
-          <div class="flower__light flower__light--4"></div>
-          <div class="flower__light flower__light--5"></div>
-          <div class="flower__light flower__light--6"></div>
-          <div class="flower__light flower__light--7"></div>
-          <div class="flower__light flower__light--8"></div>
-  
-        </div>
-        <div class="flower__line">
-          <div class="flower__line__leaf flower__line__leaf--1"></div>
-          <div class="flower__line__leaf flower__line__leaf--2"></div>
-          <div class="flower__line__leaf flower__line__leaf--3"></div>
-          <div class="flower__line__leaf flower__line__leaf--4"></div>
-          <div class="flower__line__leaf flower__line__leaf--5"></div>
-          <div class="flower__line__leaf flower__line__leaf--6"></div>
-        </div>
+<body class="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-rose-100 overflow-hidden relative font-sans animate-gradient-shift">
+  <!-- Audio Background (muted ban đầu để tránh block) -->
+  <audio id="bgMusic" loop preload="auto" muted>
+    <source src="Music/Yêu Anh Em Nhé.mp3" type="audio/mpeg">
+    Trình duyệt không hỗ trợ audio.
+  </audio>
+  <!-- Music Control -->
+  <button id="musicToggle" class="fixed top-4 right-4 z-30 bg-white/80 backdrop-blur-md rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300" aria-label="Tắt/Bật nhạc nền">
+    <i data-lucide="volume-2" class="w-6 h-6 text-pink-500"></i>
+  </button>
+
+  <!-- Stage: Hearts (thay từ Roses) -->
+  <div id="hearts" class="absolute inset-0 z-10 hidden">
+    <!-- Hearts sẽ được JS generate -->
+  </div>
+
+  <!-- Stage: Notification (giữ nguyên) -->
+  <div id="notification" class="absolute inset-0 z-20 flex items-center justify-center animate-fade-in hidden">
+    <div class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-12 max-w-md mx-4 transform animate-scale-in border border-pink-200">
+      <div class="text-center mb-6">
+        <i data-lucide="heart" class="mx-auto text-red-500 fill-red-500 animate-pulse w-16 h-16"></i>
       </div>
-  
-      <div class="flower flower--2">
-        <div class="flower__leafs flower__leafs--2">
-          <div class="flower__leaf flower__leaf--1"></div>
-          <div class="flower__leaf flower__leaf--2"></div>
-          <div class="flower__leaf flower__leaf--3"></div>
-          <div class="flower__leaf flower__leaf--4"></div>
-          <div class="flower__white-circle"></div>
-  
-          <div class="flower__light flower__light--1"></div>
-          <div class="flower__light flower__light--2"></div>
-          <div class="flower__light flower__light--3"></div>
-          <div class="flower__light flower__light--4"></div>
-          <div class="flower__light flower__light--5"></div>
-          <div class="flower__light flower__light--6"></div>
-          <div class="flower__light flower__light--7"></div>
-          <div class="flower__light flower__light--8"></div>
-  
-        </div>
-        <div class="flower__line">
-          <div class="flower__line__leaf flower__line__leaf--1"></div>
-          <div class="flower__line__leaf flower__line__leaf--2"></div>
-          <div class="flower__line__leaf flower__line__leaf--3"></div>
-          <div class="flower__line__leaf flower__line__leaf--4"></div>
-        </div>
-      </div>
-  
-      <div class="flower flower--3">
-        <div class="flower__leafs flower__leafs--3">
-          <div class="flower__leaf flower__leaf--1"></div>
-          <div class="flower__leaf flower__leaf--2"></div>
-          <div class="flower__leaf flower__leaf--3"></div>
-          <div class="flower__leaf flower__leaf--4"></div>
-          <div class="flower__white-circle"></div>
-  
-          <div class="flower__light flower__light--1"></div>
-          <div class="flower__light flower__light--2"></div>
-          <div class="flower__light flower__light--3"></div>
-          <div class="flower__light flower__light--4"></div>
-          <div class="flower__light flower__light--5"></div>
-          <div class="flower__light flower__light--6"></div>
-          <div class="flower__light flower__light--7"></div>
-          <div class="flower__light flower__light--8"></div>
-  
-        </div>
-        <div class="flower__line">
-          <div class="flower__line__leaf flower__line__leaf--1"></div>
-          <div class="flower__line__leaf flower__line__leaf--2"></div>
-          <div class="flower__line__leaf flower__line__leaf--3"></div>
-          <div class="flower__line__leaf flower__line__leaf--4"></div>
-        </div>
-      </div>
-  
-      <div class="grow-ans" style="--d:1.2s">
-        <div class="flower__g-long">
-          <div class="flower__g-long__top"></div>
-          <div class="flower__g-long__bottom"></div>
-        </div>
-      </div>
-  
-      <div class="growing-grass">
-        <div class="flower__grass flower__grass--1">
-          <div class="flower__grass--top"></div>
-          <div class="flower__grass--bottom"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--1"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--2"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--3"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--4"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--5"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--6"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--7"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--8"></div>
-          <div class="flower__grass__overlay"></div>
-        </div>
-      </div>
-  
-      <div class="growing-grass">
-        <div class="flower__grass flower__grass--2">
-          <div class="flower__grass--top"></div>
-          <div class="flower__grass--bottom"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--1"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--2"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--3"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--4"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--5"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--6"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--7"></div>
-          <div class="flower__grass__leaf flower__grass__leaf--8"></div>
-          <div class="flower__grass__overlay"></div>
-        </div>
-      </div>
-  
-      <div class="grow-ans" style="--d:2.4s">
-        <div class="flower__g-right flower__g-right--1">
-          <div class="leaf"></div>
-        </div>
-      </div>
-  
-      <div class="grow-ans" style="--d:2.8s">
-        <div class="flower__g-right flower__g-right--2">
-          <div class="leaf"></div>
-        </div>
-      </div>
-  
-      <div class="grow-ans" style="--d:2.8s">
-        <div class="flower__g-front">
-          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--1">
-            <div class="flower__g-front__leaf"></div>
+      <h2 class="text-2xl md:text-4xl font-bold text-gray-800 mb-4 text-center font-playfair">
+        Bạn có một tin nhắn đặc biệt
+      </h2>
+      <p class="text-gray-600 text-base md:text-lg mb-6 text-center">
+        Nhân dịp ngày 20/10
+      </p>
+      <button id="btnNotification" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 px-8 rounded-full text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+        Xem ngay
+      </button>
+    </div>
+  </div>
+
+  <!-- Stage: Envelope (giữ nguyên) -->
+  <div id="envelope" class="absolute inset-0 z-20 flex items-center justify-center animate-fade-in hidden">
+    <div id="envelopeContainer" class="cursor-pointer transform transition-all duration-700 hover:scale-105" tabindex="0" aria-label="Nhấn để mở thư">
+      <div class="relative">
+        <div class="w-72 md:w-96 h-48 md:h-64 bg-gradient-to-br from-red-100 via-pink-100 to-purple-100 rounded-xl shadow-2xl border-4 border-red-200 flex items-center justify-center relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-purple-50 opacity-60 animate-pulse"></div>
+
+          <div id="envelopeFlap" class="absolute top-0 left-0 right-0 h-24 md:h-32 bg-gradient-to-br from-red-200 to-purple-200 transform origin-top transition-transform duration-700 z-10 envelope-flap"></div>
+
+          <div class="relative z-10 text-center p-4 md:p-6">
+            <i data-lucide="heart" class="mx-auto text-red-400 fill-red-400 mb-4 animate-pulse w-12 md:w-16 h-12 md:h-16"></i>
+            <p class="text-red-600 font-semibold text-lg md:text-xl font-playfair">
+              Nhấn để mở
+            </p>
           </div>
-          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--2">
-            <div class="flower__g-front__leaf"></div>
+
+          <div class="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-purple-400 text-xs md:text-sm italic">
+            Dành cho em yêu
           </div>
-          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--3">
-            <div class="flower__g-front__leaf"></div>
-          </div>
-          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--4">
-            <div class="flower__g-front__leaf"></div>
-          </div>
-          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--5">
-            <div class="flower__g-front__leaf"></div>
-          </div>
-          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--6">
-            <div class="flower__g-front__leaf"></div>
-          </div>
-          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--7">
-            <div class="flower__g-front__leaf"></div>
-          </div>
-          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--8">
-            <div class="flower__g-front__leaf"></div>
-          </div>
-          <div class="flower__g-front__line"></div>
-        </div>
-      </div>
-  
-      <div class="grow-ans" style="--d:3.2s">
-        <div class="flower__g-fr">
-          <div class="leaf"></div>
-          <div class="flower__g-fr__leaf flower__g-fr__leaf--1"></div>
-          <div class="flower__g-fr__leaf flower__g-fr__leaf--2"></div>
-          <div class="flower__g-fr__leaf flower__g-fr__leaf--3"></div>
-          <div class="flower__g-fr__leaf flower__g-fr__leaf--4"></div>
-          <div class="flower__g-fr__leaf flower__g-fr__leaf--5"></div>
-          <div class="flower__g-fr__leaf flower__g-fr__leaf--6"></div>
-          <div class="flower__g-fr__leaf flower__g-fr__leaf--7"></div>
-          <div class="flower__g-fr__leaf flower__g-fr__leaf--8"></div>
-        </div>
-      </div>
-  
-      <div class="long-g long-g--0">
-        <div class="grow-ans" style="--d:3s">
-          <div class="leaf leaf--0"></div>
-        </div>
-        <div class="grow-ans" style="--d:2.2s">
-          <div class="leaf leaf--1"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.4s">
-          <div class="leaf leaf--2"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.6s">
-          <div class="leaf leaf--3"></div>
-        </div>
-      </div>
-  
-      <div class="long-g long-g--1">
-        <div class="grow-ans" style="--d:3.6s">
-          <div class="leaf leaf--0"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.8s">
-          <div class="leaf leaf--1"></div>
-        </div>
-        <div class="grow-ans" style="--d:4s">
-          <div class="leaf leaf--2"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.2s">
-          <div class="leaf leaf--3"></div>
-        </div>
-      </div>
-  
-      <div class="long-g long-g--2">
-        <div class="grow-ans" style="--d:4s">
-          <div class="leaf leaf--0"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.2s">
-          <div class="leaf leaf--1"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.4s">
-          <div class="leaf leaf--2"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.6s">
-          <div class="leaf leaf--3"></div>
-        </div>
-      </div>
-  
-      <div class="long-g long-g--3">
-        <div class="grow-ans" style="--d:4s">
-          <div class="leaf leaf--0"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.2s">
-          <div class="leaf leaf--1"></div>
-        </div>
-        <div class="grow-ans" style="--d:3s">
-          <div class="leaf leaf--2"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.6s">
-          <div class="leaf leaf--3"></div>
-        </div>
-      </div>
-  
-      <div class="long-g long-g--4">
-        <div class="grow-ans" style="--d:4s">
-          <div class="leaf leaf--0"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.2s">
-          <div class="leaf leaf--1"></div>
-        </div>
-        <div class="grow-ans" style="--d:3s">
-          <div class="leaf leaf--2"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.6s">
-          <div class="leaf leaf--3"></div>
-        </div>
-      </div>
-  
-      <div class="long-g long-g--5">
-        <div class="grow-ans" style="--d:4s">
-          <div class="leaf leaf--0"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.2s">
-          <div class="leaf leaf--1"></div>
-        </div>
-        <div class="grow-ans" style="--d:3s">
-          <div class="leaf leaf--2"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.6s">
-          <div class="leaf leaf--3"></div>
-        </div>
-      </div>
-  
-      <div class="long-g long-g--6">
-        <div class="grow-ans" style="--d:4.2s">
-          <div class="leaf leaf--0"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.4s">
-          <div class="leaf leaf--1"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.6s">
-          <div class="leaf leaf--2"></div>
-        </div>
-        <div class="grow-ans" style="--d:4.8s">
-          <div class="leaf leaf--3"></div>
-        </div>
-      </div>
-  
-      <div class="long-g long-g--7">
-        <div class="grow-ans" style="--d:3s">
-          <div class="leaf leaf--0"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.2s">
-          <div class="leaf leaf--1"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.5s">
-          <div class="leaf leaf--2"></div>
-        </div>
-        <div class="grow-ans" style="--d:3.6s">
-          <div class="leaf leaf--3"></div>
         </div>
       </div>
     </div>
-    
-    <script src="main.js"></script>
-  </body>
+  </div>
+
+  <!-- Stage: Letter (giữ nguyên) -->
+  <div id="letter" class="absolute inset-0 z-20 flex items-center justify-center p-4 animate-fade-in hidden overflow-y-auto">
+    <div class="bg-gradient-to-br from-amber-50 via-orange-50 to-pink-50 rounded-xl shadow-2xl p-6 md:p-12 max-w-2xl w-full my-8 transform animate-scale-in border-4 border-amber-200 relative">
+      <div class="absolute top-2 left-2 md:top-4 md:left-4 text-amber-300 opacity-40">
+        <i data-lucide="heart" class="w-16 md:w-20 h-16 md:h-20"></i> <!-- Đổi flower2 thành heart cho consistency -->
+      </div>
+      <div class="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-amber-300 opacity-40">
+        <i data-lucide="heart" class="w-16 md:w-20 h-16 md:h-20"></i>
+      </div>
+
+      <div class="relative z-10">
+        <div class="text-center mb-8">
+          <h2 id="letterTitle" class="text-3xl md:text-5xl font-bold text-red-500 mb-2 font-playfair typewriter">
+            Gửi Em Yêu
+          </h2>
+          <div class="flex justify-center gap-2 mt-4">
+            <i data-lucide="heart" class="text-red-400 fill-red-400 w-5 md:w-6 h-5 md:h-6 animate-bounce"></i>
+            <i data-lucide="heart" class="text-purple-400 fill-purple-400 w-5 md:w-6 h-5 md:h-6 animate-bounce" style="animation-delay: 0.1s"></i>
+            <i data-lucide="heart" class="text-pink-400 fill-pink-400 w-5 md:w-6 h-5 md:h-6 animate-bounce" style="animation-delay: 0.2s"></i>
+          </div>
+        </div>
+
+        <div class="space-y-6 text-gray-700 text-base md:text-lg leading-relaxed font-serif">
+          <p>Nhân ngày 20/10, anh muốn gửi đến em những lời chúc tốt đẹp nhất.</p>
+          <p>Em là ánh sáng trong cuộc đời anh, là nguồn động lực để anh cố gắng mỗi ngày. Nụ cười của em như những bông hoa hồng tươi thắm, làm cuộc sống của anh thêm rực rỡ.</p>
+          <p>Anh chúc em luôn xinh đẹp, tươi trẻ như hoa. Chúc em luôn mạnh khỏe, hạnh phúc và thành công trong mọi điều em làm.</p>
+          <p>Cảm ơn em đã luôn ở bên anh, lắng nghe anh, và yêu thương anh. Em là món quà quý giá nhất mà cuộc đời trao tặng cho anh.</p>
+          <p class="text-center text-xl md:text-2xl font-bold text-red-500 mt-8">Anh yêu em nhiều lắm! ❤️</p>
+          <p class="text-right text-gray-600 italic mt-8">Yêu thương,<br> Bíu eo của em</p>
+        </div>
+
+        <div class="mt-8 flex justify-center gap-3">
+          <i data-lucide="heart" class="text-red-400 fill-red-400 animate-bounce w-6 md:w-8 h-6 md:h-8"></i> <!-- Đổi flower2 -->
+          <i data-lucide="heart" class="text-pink-400 fill-pink-400 animate-bounce w-6 md:w-8 h-6 md:h-8" style="animation-delay: 0.2s"></i>
+          <i data-lucide="heart" class="text-purple-400 fill-purple-400 animate-bounce w-6 md:w-8 h-6 md:h-8" style="animation-delay: 0.4s"></i>
+        </div>
+
+        <button id="backToEnvelope" class="mt-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-6 rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+          Quay lại
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas (cho hiệu ứng khi mở thư) -->
+  <canvas id="confetti" class="absolute inset-0 z-25 hidden pointer-events-none"></canvas>
+
+  <!-- Custom JS -->
+  <script src="script.js"></script>
+</body>
 </html>
